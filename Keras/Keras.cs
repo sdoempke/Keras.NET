@@ -37,6 +37,15 @@ namespace Keras
 
             try
             {
+                instance.kerastuner = InstallAndImport("kerastuner");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Warning! keras-tuner is not installed.");
+            }
+
+            try
+            {
                 instance.keras2onnx = InstallAndImport("onnxmltools");
             }
             catch (Exception ex)
@@ -81,7 +90,6 @@ namespace Keras
             return mod;
         }
 
-
         public dynamic keras = null;
 
         public dynamic tensorflow = null;
@@ -89,6 +97,8 @@ namespace Keras
         public dynamic keras2onnx = null;
 
         public dynamic tfjs = null;
+
+        public dynamic kerastuner = null;
 
         private bool IsInitialized => keras != null;
 

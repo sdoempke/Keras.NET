@@ -88,8 +88,8 @@ namespace Keras.Layers
         /// <param name="unroll"> Boolean (default False). If True, the network will be unrolled, else a symbolic loop will be used. Unrolling can speed-up a RNN, although it tends to be more memory-intensive. Unrolling is only suitable for short sequences.</param>
 
         public SimpleRNN(int units, string activation= "tanh", bool use_bias= true, string kernel_initializer= "glorot_uniform", string recurrent_initializer= "orthogonal"
-            , string bias_initializer= "zeros", string kernel_regularizer= "", string recurrent_regularizer= "", string bias_regularizer= "", 
-            string activity_regularizer= "", string kernel_constraint= "", string recurrent_constraint= "", string bias_constraint= "", float dropout= 0.0f,
+            , string bias_initializer= "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null, StringOrInstance bias_regularizer = null,
+             StringOrInstance activity_regularizer = null, string kernel_constraint= "", string recurrent_constraint= "", string bias_constraint= "", float dropout= 0.0f,
             float recurrent_dropout= 0.0f, bool return_sequences= false, bool return_state= false, bool go_backwards= false, bool stateful= false, bool unroll= false)
         {
             Parameters["units"] = units;
@@ -143,8 +143,8 @@ namespace Keras.Layers
         /// <param name="recurrent_dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the recurrent state.</param>
 
         public SimpleRNNCell(int units, string activation = "tanh", bool use_bias = true, string kernel_initializer = "glorot_uniform", string recurrent_initializer = "orthogonal"
-            , string bias_initializer = "zeros", string kernel_regularizer = "", string recurrent_regularizer = "", string bias_regularizer = "",
-            string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "", float dropout = 0.0f, float recurrent_dropout = 0.0f)
+            , string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null, StringOrInstance bias_regularizer = null,
+             StringOrInstance activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "", float dropout = 0.0f, float recurrent_dropout = 0.0f)
         {
             Parameters["units"] = units;
             Parameters["activation"] = activation;
@@ -200,8 +200,8 @@ namespace Keras.Layers
         /// <param name="unroll"> Boolean (default False). If True, the network will be unrolled, else a symbolic loop will be used. Unrolling can speed-up a RNN, although it tends to be more memory-intensive. Unrolling is only suitable for short sequences.</param>
         /// <param name="reset_after"> GRU convention (whether to apply reset gate after or before matrix multiplication). False = "before" (default), True = "after" (CuDNN compatible).</param>
         public GRU(int units, string activation = "tanh", string recurrent_activation = "hard_sigmoid", bool use_bias = true, string kernel_initializer = "glorot_uniform"
-            , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", string kernel_regularizer = "", string recurrent_regularizer = "",
-            string bias_regularizer = "", string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
+            , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null,
+             StringOrInstance bias_regularizer = null, string activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
             float dropout = 0.0f, float recurrent_dropout = 0.0f, int implementation = 1, bool return_sequences = false, bool return_state = false, bool go_backwards = false,
             bool stateful = false, bool unroll = false, bool reset_after = false)
         {
@@ -256,8 +256,8 @@ namespace Keras.Layers
         /// <param name="return_sequences">Boolean. Whether to return the last output in the output sequence, or the full sequence.</param>
         /// <param name="return_state">Boolean. Whether to return the last state in addition to the output.</param>
         /// <param name="stateful">Boolean (default False). If True, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</param>
-        public CuDNNGRU(int units, string kernel_initializer = "glorot_uniform" , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", string kernel_regularizer = "", string recurrent_regularizer = "",
-            string bias_regularizer = "", string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
+        public CuDNNGRU(int units, string kernel_initializer = "glorot_uniform" , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null,
+            StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
             bool return_sequences = false, bool return_state = false, bool stateful = false)
         {
             Parameters["units"] = units;
@@ -307,8 +307,8 @@ namespace Keras.Layers
         /// <param name="implementation"> Implementation mode, either 1 or 2. Mode 1 will structure its operations as a larger number of smaller dot products and additions, whereas mode 2 will batch them into fewer, larger operations. These modes will have different performance profiles on different hardware and for different applications.</param>
         /// <param name="reset_after"> GRU convention (whether to apply reset gate after or before matrix multiplication). False = "before" (default), True = "after" (CuDNN compatible).</param>
         public GRUCell(int units, string activation = "tanh", string recurrent_activation = "hard_sigmoid", bool use_bias = true, string kernel_initializer = "glorot_uniform"
-            , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", string kernel_regularizer = "", string recurrent_regularizer = "",
-            string bias_regularizer = "", string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
+            , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null,
+            StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
             float dropout = 0.0f, float recurrent_dropout = 0.0f, int implementation = 1, bool reset_after = false)
         {
             Parameters["units"] = units;
@@ -367,8 +367,8 @@ namespace Keras.Layers
         /// <param name="unroll">Boolean (default False). If True, the network will be unrolled, else a symbolic loop will be used. Unrolling can speed-up a RNN, although it tends to be more memory-intensive. Unrolling is only suitable for short sequences.</param>
         /// <param name="batch_input_shape">Optional input batch size (integer or None).</param>
         public LSTM(int units, string activation = "tanh", string recurrent_activation = "hard_sigmoid", bool use_bias = true, StringOrInstance kernel_initializer = null
-            , StringOrInstance recurrent_initializer = null, string bias_initializer = "zeros", bool unit_forget_bias = true, string kernel_regularizer = "",
-            string recurrent_regularizer = "", string bias_regularizer = "", string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "",
+            , StringOrInstance recurrent_initializer = null, string bias_initializer = "zeros", bool unit_forget_bias = true, StringOrInstance kernel_regularizer = null,
+             StringOrInstance recurrent_regularizer = null, StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "",
             string bias_constraint = "", float dropout = 0.0f, float recurrent_dropout = 0.0f, int implementation = 1, bool return_sequences = false, bool return_state = false,
             bool go_backwards = false, bool stateful = false, bool unroll = false, Shape batch_input_shape = null, Shape input_shape = null)
         {
@@ -431,7 +431,7 @@ namespace Keras.Layers
         /// <param name="return_state">Boolean. Whether to return the last state in addition to the output.</param>
         /// <param name="stateful">Boolean (default False). If True, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</param>
         public CuDNNLSTM(int units, string kernel_initializer = "glorot_uniform" , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", 
-            bool unit_forget_bias = true, string kernel_regularizer = "", string recurrent_regularizer = "", string bias_regularizer = "", string activity_regularizer = "", 
+            bool unit_forget_bias = true, StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null, StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, 
             string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "", bool return_sequences = false, bool return_state = false, bool stateful = false)
         {
             Parameters["units"] = units;
@@ -482,8 +482,8 @@ namespace Keras.Layers
         /// <param name="recurrent_dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the recurrent state.</param>
         /// <param name="implementation">Implementation mode, either 1 or 2. Mode 1 will structure its operations as a larger number of smaller dot products and additions, whereas mode 2 will batch them into fewer, larger operations. These modes will have different performance profiles on different hardware and for different applications.</param>
         public LSTMCell(int units, string activation = "tanh", string recurrent_activation = "hard_sigmoid", bool use_bias = true, string kernel_initializer = "glorot_uniform"
-            , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", bool unit_forget_bias = true, string kernel_regularizer = "",
-            string recurrent_regularizer = "", string bias_regularizer = "", string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "",
+            , string recurrent_initializer = "orthogonal", string bias_initializer = "zeros", bool unit_forget_bias = true, StringOrInstance kernel_regularizer = null,
+             StringOrInstance recurrent_regularizer = null, StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "",
             string bias_constraint = "", float dropout = 0.0f, float recurrent_dropout = 0.0f, int implementation = 1)
         {
             Parameters["units"] = units;
@@ -548,8 +548,8 @@ namespace Keras.Layers
         public ConvLSTM2D(int filters, Tuple<int, int> kernel_size, Tuple<int, int> strides = null, string padding = "valid", string data_format = "",
             Tuple<int, int> dilation_rate = null, string activation = "tanh", string recurrent_activation = "hard_sigmoid", bool use_bias = true,
             string kernel_initializer = "glorot_uniform", string recurrent_initializer = "orthogonal", string bias_initializer = "zeros",
-            bool unit_forget_bias = true, string kernel_regularizer = "", string recurrent_regularizer = "", string bias_regularizer = "",
-            string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
+            bool unit_forget_bias = true, StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null, StringOrInstance bias_regularizer = null,
+             StringOrInstance activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
             bool return_sequences = false, bool go_backwards = false, bool stateful = false, float dropout = 0.0f, float recurrent_dropout = 0.0f, Shape input_shape = null)
         {
             Parameters["filters"] = filters;
@@ -620,8 +620,8 @@ namespace Keras.Layers
         public ConvLSTM2DCell(int filters, Tuple<int, int> kernel_size, Tuple<int, int> strides = null, string padding = "valid", string data_format = "",
             Tuple<int, int> dilation_rate = null, string activation = "tanh", string recurrent_activation = "hard_sigmoid", bool use_bias = true,
             string kernel_initializer = "glorot_uniform", string recurrent_initializer = "orthogonal", string bias_initializer = "zeros",
-            bool unit_forget_bias = true, string kernel_regularizer = "", string recurrent_regularizer = "", string bias_regularizer = "",
-            string activity_regularizer = "", string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
+            bool unit_forget_bias = true, StringOrInstance kernel_regularizer = null, StringOrInstance recurrent_regularizer = null, StringOrInstance bias_regularizer = null,
+             StringOrInstance activity_regularizer = null, string kernel_constraint = "", string recurrent_constraint = "", string bias_constraint = "",
             float dropout = 0.0f, float recurrent_dropout = 0.0f, Shape input_shape = null)
         {
             Parameters["filters"] = filters;

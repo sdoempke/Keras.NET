@@ -31,8 +31,8 @@
         /// <param name="input_shape">3D tensor with shape: (batch, steps, channels)</param>
         public Conv1D(int filters, int kernel_size, int strides = 1, string padding = "valid", string data_format = "channels_last",
                     int dilation_rate = 1, string activation = "", bool use_bias = true, string kernel_initializer = "glorot_uniform",
-                    string bias_initializer = "zeros", string kernel_regularizer = "", string bias_regularizer = "",
-                    string activity_regularizer = "", string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
+                    string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance bias_regularizer = null,
+                     StringOrInstance activity_regularizer = null, string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["filters"] = filters;
             Parameters["kernel_size"] = kernel_size;
@@ -85,8 +85,8 @@
         /// <param name="input_shape">4D tensor with shape: (batch, channels, rows, cols) if data_format is "channels_first" or 4D tensor with shape: (batch, rows, cols, channels) if data_format is "channels_last".</param>
         public Conv2D(int filters, Tuple<int, int> kernel_size, Tuple<int, int> strides = null, string padding = "valid", string data_format = "channels_last",
                     Tuple<int, int> dilation_rate = null, string activation = "", bool use_bias = true, string kernel_initializer = "glorot_uniform",
-                    string bias_initializer = "zeros", string kernel_regularizer = "", string bias_regularizer = "",
-                    string activity_regularizer = "", string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
+                    string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance bias_regularizer = null,
+                     StringOrInstance activity_regularizer = null, string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["filters"] = filters;
             Parameters["kernel_size"] = new Shape(kernel_size.Item1, kernel_size.Item2); 
@@ -143,8 +143,8 @@
         /// <param name="input_shape">5D tensor with shape: (batch, channels, conv_dim1, conv_dim2, conv_dim3) if data_format is "channels_first" or 5D tensor with shape: (batch, conv_dim1, conv_dim2, conv_dim3, channels) if data_format is "channels_last".</param>
         public Conv3D(int filters, Tuple<int, int, int> kernel_size, Tuple<int, int, int> strides = null, string padding = "valid", string data_format = "channels_last",
                     Tuple<int, int, int> dilation_rate = null, string activation = "", bool use_bias = true, string kernel_initializer = "glorot_uniform",
-                    string bias_initializer = "zeros", string kernel_regularizer = "", string bias_regularizer = "",
-                    string activity_regularizer = "", string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
+                    string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance bias_regularizer = null,
+                     StringOrInstance activity_regularizer = null, string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["filters"] = filters;
             Parameters["kernel_size"] = new Shape(kernel_size.Item1, kernel_size.Item2, kernel_size.Item3);
@@ -201,8 +201,8 @@
         /// <param name="input_shape">3D tensor with shape: (batch, channels, steps) if data_format is "channels_first" or 3D tensor with shape: (batch, steps, channels) if data_format is "channels_last".</param>
         public SeparableConv1D(int filters, int kernel_size, int strides = 1, string padding = "valid", string data_format = "channels_last",
                     int dilation_rate = 1, int depth_multiplier = 1, string activation = "", bool use_bias = true, string depthwise_initializer = "glorot_uniform",
-                    string pointwise_initializer = "glorot_uniform", string bias_initializer = "zeros", string depthwise_regularizer = "", 
-                    string pointwise_regularizer = "", string bias_regularizer = "", string activity_regularizer = "", string depthwise_constraint = "", 
+                    string pointwise_initializer = "glorot_uniform", string bias_initializer = "zeros", StringOrInstance depthwise_regularizer = null,
+                     StringOrInstance pointwise_regularizer = null, StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, string depthwise_constraint = "", 
                     string pointwise_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["filters"] = filters;
@@ -265,8 +265,8 @@
         /// <param name="input_shape">4D tensor with shape: (batch, channels, rows, cols) if data_format is "channels_first" or 4D tensor with shape: (batch, rows, cols, channels) if data_format is "channels_last".</param>
         public SeparableConv2D(int filters, Tuple<int, int> kernel_size, Tuple<int, int> strides = null, string padding = "valid", string data_format = "channels_last",
                     Tuple<int, int> dilation_rate = null, int depth_multiplier = 1, string activation = "", bool use_bias = true, string depthwise_initializer = "glorot_uniform",
-                    string pointwise_initializer = "glorot_uniform", string bias_initializer = "zeros", string depthwise_regularizer = "",
-                    string pointwise_regularizer = "", string bias_regularizer = "", string activity_regularizer = "", string depthwise_constraint = "",
+                    string pointwise_initializer = "glorot_uniform", string bias_initializer = "zeros", StringOrInstance depthwise_regularizer = null,
+                     StringOrInstance pointwise_regularizer = null, StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, string depthwise_constraint = "",
                     string pointwise_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["filters"] = filters;
@@ -328,7 +328,7 @@
         /// <param name="input_shape">4D tensor with shape: (batch, channels, rows, cols) if data_format is "channels_first" or 4D tensor with shape: (batch, rows, cols, channels) if data_format is "channels_last".</param>
         public DepthwiseConv2D(Tuple<int, int> kernel_size, Tuple<int, int> strides = null, string padding = "valid", 
                     int depth_multiplier = 1, string data_format = "", string activation = "", bool use_bias = true, string depthwise_initializer = "glorot_uniform",
-                    string bias_initializer = "zeros", string depthwise_regularizer = "", string bias_regularizer = "", string activity_regularizer = "", 
+                    string bias_initializer = "zeros", StringOrInstance depthwise_regularizer = null, StringOrInstance bias_regularizer = null, StringOrInstance activity_regularizer = null, 
                     string depthwise_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["kernel_size"] = new Shape(kernel_size.Item1, kernel_size.Item2);
@@ -386,8 +386,8 @@
         /// <param name="input_shape">4D tensor with shape: (batch, channels, rows, cols) if data_format is "channels_first" or 4D tensor with shape: (batch, rows, cols, channels) if data_format is "channels_last".</param>
         public Conv2DTranspose(int filters, Tuple<int, int> kernel_size, Tuple<int, int> strides = null, string padding = "valid", Tuple<int, int> output_padding = null,
                     string data_format = "channels_last", Tuple<int, int> dilation_rate = null, string activation = "", bool use_bias = true, string kernel_initializer = "glorot_uniform",
-                    string bias_initializer = "zeros", string kernel_regularizer = "", string bias_regularizer = "",
-                    string activity_regularizer = "", string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
+                    string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance bias_regularizer = null,
+                    StringOrInstance activity_regularizer = null, string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["filters"] = filters;
             Parameters["kernel_size"] = new Shape(kernel_size.Item1, kernel_size.Item2);
@@ -443,8 +443,8 @@
         public Conv3DTranspose(int filters, Tuple<int, int, int> kernel_size, Tuple<int, int, int> strides = null, string padding = "valid",
                     Tuple<int, int, int> output_padding = null, string data_format = "channels_last", Tuple<int, int, int> dilation_rate = null, 
                     string activation = "", bool use_bias = true, string kernel_initializer = "glorot_uniform",
-                    string bias_initializer = "zeros", string kernel_regularizer = "", string bias_regularizer = "",
-                    string activity_regularizer = "", string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
+                    string bias_initializer = "zeros", StringOrInstance kernel_regularizer = null, StringOrInstance bias_regularizer = null,
+                     StringOrInstance activity_regularizer = null, string kernel_constraint = "", string bias_constraint = "", Shape input_shape = null)
         {
             Parameters["filters"] = filters;
             Parameters["kernel_size"] = new Shape(kernel_size.Item1, kernel_size.Item2, kernel_size.Item3);

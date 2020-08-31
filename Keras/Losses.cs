@@ -212,4 +212,58 @@ namespace Keras
             return new NDarray(InvokeStaticMethod(caller, "cosine_proximity", parameters));
         }
     }
+
+
+    /// <summary>
+    /// LossFunctionWrapper
+    /// </summary>
+    /// <seealso cref="Keras.Base" />
+    public abstract class LossFunctionWrapper : Base
+    {
+        /// <summary>
+        /// Invokes the `LossFunctionWrapper` instance.
+        /// </summary>
+        /// <param name="y_true">Ground truth values.</param>
+        /// <param name="y_pred">The predicted values.</param>
+        /// <returns>Loss values per sample</returns>
+        NDarray Call(NDarray y_true, NDarray y_pred)
+        {
+            var args = new Dictionary<string, object>();
+            args["y_true"] = y_true;
+            args["y_pred"] = y_pred;
+        
+            var pyResult = InvokeMethod("call", args);
+            return pyResult.As<NDarray>();
+        }
+    }
+
+    /// <summary>
+    /// Computes the crossentropy loss between the labels and predictions.
+    /// Use this crossentropy loss function when there are two or more label classes.
+    /// We expect labels to be provided as integers.If you want to provide labels
+    /// using `one-hot` representation, please use `CategoricalCrossentropy` loss.
+    /// There should be `# classes` floating point values per feature for `y_pred`
+    /// and a single floating point value per feature for `y_true`.
+    /// </summary>
+    /// <seealso cref="Keras.LossFunctionWrapper" />
+    public class SparseCategoricalCrossentropy : LossFunctionWrapper
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SparseCategoricalCrossentropy"/> class.
+        /// </summary>
+        /// <param name="from_logits">Whether `y_pred` is expected to be a logits tensor. By default, we assume that `y_pred` encodes a probability distribution. **Note - Using from_logits = True may be more numerically stable.</param>
+        /// <param name="reduction">(Optional) Type of `tf.keras.losses.Reduction` to apply to loss.Default value is `AUTO`. `AUTO` indicates that the reduction option will be determined by the usage context.For almost all cases this defaults to `SUM_OVER_BATCH_SIZE`. When used with `tf.distribute.Strategy`, outside of built-in training loops such as `tf.keras` `compile` and `fit`, using `AUTO` or `SUM_OVER_BATCH_SIZE` will raise an error.Please see this custom training [tutorial](https://www.tensorflow.org/tutorials/distribute/custom_training) for more details.</param>
+        /// <param name="name">: Optional name for the op. Defaults to 'sparse_categorical_crossentropy'</param>
+        public SparseCategoricalCrossentropy(bool from_logits = false,
+                                             string reduction = "auto",
+                                             string name = "sparse_categorical_crossentropy")
+        {
+            Parameters["from_logits"] = from_logits;
+            Parameters["reduction"] = reduction;
+            Parameters["name"] = name;
+
+            PyInstance = Instance.keras.losses.SparseCategoricalCrossentropy;
+            Init();
+        }
+    }
 }
