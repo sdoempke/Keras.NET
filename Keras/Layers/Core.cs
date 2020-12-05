@@ -58,7 +58,7 @@
         /// <param name="input_shape">nD tensor with shape: (batch_size, ..., input_dim). The most common situation would be a 2D input with shape (batch_size, input_dim).</param>
         public Dense(int units, int? input_dim = null, string activation= "", bool use_bias= true, StringOrInstance kernel_initializer= null, 
                     string bias_initializer= "zeros", StringOrInstance kernel_regularizer= null, string bias_regularizer= "", 
-                    string activity_regularizer= "", string kernel_constraint= "", string bias_constraint= "", Shape input_shape = null)
+                    string activity_regularizer= "", string kernel_constraint= "", string bias_constraint= "", string name = null, Shape input_shape = null)
         {
             this["units"] = units;
             this["input_dim"] = input_dim;
@@ -71,6 +71,8 @@
             this["activity_regularizer"] = activity_regularizer;
             this["kernel_constraint"] = kernel_constraint;
             this["bias_constraint"] = bias_constraint;
+            if (name != null)
+                this["name"] = name;
             Parameters["input_shape"] = input_shape;
             PyInstance = Instance.keras.layers.Dense;
             Init();
@@ -171,7 +173,7 @@
         /// </summary>
         /// <param name="dims">Tuple of integers. Permutation pattern, does not include the samples dimension. Indexing starts at 1. For instance, (2, 1) permutes the first and second dimension of the input.</param>
         /// <param name="input_shape">Arbitrary. Use the keyword argument input_shape (tuple of integers, does not include the samples axis) when using this layer as the first layer in a model.</param>
-        public Permute(int dims, Shape input_shape = null)
+        public Permute(Shape dims, Shape input_shape = null)
         {
             Parameters["dims"] = dims;
             Parameters["input_shape"] = input_shape;

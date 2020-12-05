@@ -35,5 +35,11 @@ namespace Keras.Layers
                 //__self__.input = inputs[0].ToPython();
             }
         }
+
+        public int GetKerasShape(int index)
+        {
+            var value = PyInstance.shape[index];
+            return (int)value;
+        }
     }
 }

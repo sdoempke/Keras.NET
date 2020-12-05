@@ -22,6 +22,14 @@ namespace Keras.UnitTest
         }
 
         [TestMethod]
+        public void ShapeTest()
+        {
+            var input = new Input(new Shape(10, 10));
+            var x = new Dense(10).Set(input);
+            x.GetKerasShape(-1);
+        }
+
+        [TestMethod]
         public void Dense_CustomKRegularizerAndKInitParams()
         {
             NDarray x = np.array(new float[,] { { 1, 0 }, { 1, 1 }, { 1, 0 }, { 1, 1 } });

@@ -208,10 +208,22 @@ namespace Keras
             return data.Replace("\n", "\r\n");
         }
 
+        public static void ClearStdOut()
+        {
+            sys.stdout.truncate(0);
+            sys.stdout.seek(0);
+        }
+
         public static string GetStdError()
         {
             string data = sys.stderr.getvalue().ToString();
             return data.Replace("\n", "\r\n");
+        }
+
+        public static void ClearStdError()
+        {
+            sys.stderr.truncate(0);
+            sys.stderr.seek(0);
         }
     }
 }

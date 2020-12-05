@@ -59,12 +59,15 @@ namespace Keras.UnitTest
                     project_name: "Case2");
 
                 tuner.search_space_summary();
- 
+
+                var stdResult = Keras.GetStdOut();
+                Keras.ClearStdOut();
+
                 tuner.Search(x, y, epochs: 5, validation_data: new NDarray[] { val_x, val_y });
 
                 tuner.results_summary();
 
-                var stdResult = Keras.GetStdOut();
+                stdResult = Keras.GetStdOut();
                 Console.WriteLine(stdResult);
             }
         }
