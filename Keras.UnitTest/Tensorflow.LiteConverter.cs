@@ -8,6 +8,7 @@ using Keras.Models;
 using Keras.Layers;
 using Keras.Optimizers;
 using System.IO;
+using Keras.Tensorflow.Lite;
 
 namespace Keras.UnitTest
 {
@@ -21,6 +22,12 @@ namespace Keras.UnitTest
             {
                 var model = BuildModel();
                 var converter = TFLiteConverter.FromKerasModel(model);
+                converter.SetDefaultOptimizations();
+                //converter.SetTargetSpecSupportedTypes(Numpy.np.int8);
+                converter.SetTargetSpecSupportedOpsToUInt8();
+                converter.SetInferenceInputType(Numpy.np.uint8);
+                converter.SetInferenceOutputType(Numpy.np.uint8);
+                converter.SetRepresentiveDataSet(new float[100]);
                 var tfLiteModel = converter.Convert();
                 var bytes = tfLiteModel.As<byte[]>();
                 File.WriteAllBytes(@"c:\temp\test.tflite", bytes);

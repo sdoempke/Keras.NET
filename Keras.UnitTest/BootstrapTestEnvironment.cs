@@ -8,7 +8,7 @@ namespace Keras.UnitTest
     [TestClass]
     public class BootstrapTestEnvironment
     {
-        public const string PythonPath = @"C:\DeepLearning\Python38";
+        public const string PythonPath = @"C:\Sigma\DeepLearning\Python38";
 
         [AssemblyInitialize]
         public static void TestInitialize(TestContext testContext)

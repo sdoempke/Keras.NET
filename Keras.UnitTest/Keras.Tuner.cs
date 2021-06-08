@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Numpy;
 using Python.Runtime;
 using System;
+using System.Linq;
 
 namespace Keras.UnitTest
 {
@@ -232,6 +233,9 @@ namespace Keras.UnitTest
                 tuner.Search(x, y, epochs: 5, validation_data: new NDarray[] { val_x, val_y });
 
                 tuner.results_summary();
+
+                var bestParameters = tuner.get_best_hyperparameters(1).First();
+                var bestModel = BuildModelCase7(bestParameters);
 
                 var stdResult = Keras.GetStdOut();
                 Console.WriteLine(stdResult);

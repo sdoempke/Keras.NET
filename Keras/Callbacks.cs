@@ -304,7 +304,7 @@ namespace Keras.Callbacks
         /// <param name="embeddings_data"> data to be embedded at layers specified in embeddings_layer_names. Numpy array (if the model has a single input) or list of Numpy arrays (if the model has multiple inputs). Learn more about embeddings.</param>
         public TensorBoard(string log_dir= "./logs", int histogram_freq= 0, int batch_size= 32, bool write_graph= true, bool write_grads= false, 
                     bool write_images= false, int embeddings_freq= 0, string[] embeddings_layer_names= null, Dictionary<string, string> embeddings_metadata= null, 
-                    NDarray embeddings_data= null, string update_freq= "epoch")
+                    NDarray embeddings_data= null, string update_freq= "epoch", Tuple<int,int> profile_batch=null)
         {
             Parameters["log_dir"] = log_dir;
             Parameters["histogram_freq"] = histogram_freq;
@@ -315,6 +315,7 @@ namespace Keras.Callbacks
             Parameters["embeddings_metadata"] = embeddings_metadata;
             Parameters["embeddings_data"] = embeddings_data?.PyObject;
             Parameters["update_freq"] = update_freq;
+            Parameters["profile_batch"] = profile_batch == null ? new Shape(2, 2) : new Shape(profile_batch.Item1, profile_batch.Item2);
 
             PyInstance = Instance.keras.callbacks.TensorBoard;
             Init();

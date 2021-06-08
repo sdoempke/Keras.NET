@@ -1,8 +1,10 @@
 ﻿using Keras.Callbacks;
+using Keras.Models;
 using Numpy;
 using Python.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Keras.Tuner
@@ -23,6 +25,36 @@ namespace Keras.Tuner
             args["num_trials"] = num_trials;
 
             InvokeMethod("results_summary", args);
+        }
+
+        public List<BaseModel> get_best_models(int num_models = 1) 
+        {
+            var args = new Dictionary<string, object>();
+            args["num_models"] = num_models;
+
+            var pyArray = InvokeMethod("get_best_models", args).As<PyObject[]>();
+            var resultList = new List<BaseModel>();
+            foreach(var pyObject in pyArray)
+            {
+                var pyType = pyObject.GetPythonType();
+                var pyTypeString = pyType.ToString();
+
+                if (pyTypeString.Contains("Sequential"))
+                    resultList.Add(new Sequential(pyObject));
+                else if (pyTypeString.Contains("Model"))
+                    resultList.Add(new Model(pyObject));
+            }
+
+            return resultList;
+        }
+
+        public List<HyperParameters> get_best_hyperparameters(int num_trials = 1)
+        {
+            var args = new Dictionary<string, object>();
+            args["num_trials"] = num_trials;
+
+            var pyArray = InvokeMethod("get_best_hyperparameters", args).As<PyObject[]>();
+            return pyArray.Select(p => new HyperParameters(p)).ToList();
         }
 
         /// <summary>

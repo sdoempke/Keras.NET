@@ -38,6 +38,73 @@ namespace Keras.Models
         }
 
         /// <summary>
+        ///Configures the model for training.
+        /// </summary>
+        /// <param name="optimizer"> String (name of optimizer) or optimizer instance. See optimizers.</param>
+        /// <param name="loss"> String (name of objective function) or objective function. See losses. If the model has multiple outputs, you can use a different loss on each output by passing a dictionary or a list of losses. The loss value that will be minimized by the model will then be the sum of all individual losses.</param>
+        /// <param name="metrics"> List of metrics to be evaluated by the model during training and testing. Typically you will use metrics=['accuracy']. To specify different metrics for different outputs of a multi-output model, you could also pass a dictionary, such as metrics={'output_a': 'accuracy'}.</param>
+        /// <param name="loss_weights"> Optional list or dictionary specifying scalar coefficients (Python floats) to weight the loss contributions of different model outputs. The loss value that will be minimized by the model will then be the weighted sum of all individual losses, weighted by the loss_weightscoefficients. If a list, it is expected to have a 1:1 mapping to the model's outputs. If a tensor, it is expected to map output names (strings) to scalar coefficients.</param>
+        /// <param name="sample_weight_mode"> If you need to do timestep-wise sample weighting (2D weights), set this to "temporal". None defaults to sample-wise weights (1D). If the model has multiple outputs, you can use a different sample_weight_mode on each output by passing a dictionary or a list of modes.</param>
+        /// <param name="weighted_metrics"> List of metrics to be evaluated and weighted by sample_weight or class_weight during training and testing.</param>
+        /// <param name="target_tensors"> By default, Keras will create placeholders for the model's target, which will be fed with the target data during training. If instead you would like to use your own target tensors (in turn, Keras will not expect external Numpy data for these targets at training time), you can specify them via the target_tensors argument. It can be a single tensor (for a single-output model), a list of tensors, or a dict mapping output names to target tensors.</param>
+        public void Compile(StringOrInstance optimizer, string[] loss, string[] metrics = null, float[] loss_weights = null,
+                       string sample_weight_mode = null, string[] weighted_metrics = null, NDarray[] target_tensors = null)
+        {
+            var args = new Dictionary<string, object>();
+            args["optimizer"] = optimizer;
+            args["loss"] = loss;
+            args["metrics"] = metrics;
+            args["loss_weights"] = loss_weights;
+            args["sample_weight_mode"] = sample_weight_mode;
+            args["weighted_metrics"] = weighted_metrics;
+            args["target_tensors"] = target_tensors;
+
+            InvokeMethod("compile", args);
+        }
+
+        /// </summary>
+        /// <param name="optimizer"> String (name of optimizer) or optimizer instance. See optimizers.</param>
+        /// <param name="loss"> String (name of objective function) or objective function. See losses. If the model has multiple outputs, you can use a different loss on each output by passing a dictionary or a list of losses. The loss value that will be minimized by the model will then be the sum of all individual losses.</param>
+        /// <param name="metrics"> List of metrics to be evaluated by the model during training and testing. Typically you will use metrics=['accuracy']. To specify different metrics for different outputs of a multi-output model, you could also pass a dictionary, such as metrics={'output_a': 'accuracy'}.</param>
+        /// <param name="loss_weights"> Optional list or dictionary specifying scalar coefficients (Python floats) to weight the loss contributions of different model outputs. The loss value that will be minimized by the model will then be the weighted sum of all individual losses, weighted by the loss_weightscoefficients. If a list, it is expected to have a 1:1 mapping to the model's outputs. If a tensor, it is expected to map output names (strings) to scalar coefficients.</param>
+        /// <param name="sample_weight_mode"> If you need to do timestep-wise sample weighting (2D weights), set this to "temporal". None defaults to sample-wise weights (1D). If the model has multiple outputs, you can use a different sample_weight_mode on each output by passing a dictionary or a list of modes.</param>
+        /// <param name="weighted_metrics"> List of metrics to be evaluated and weighted by sample_weight or class_weight during training and testing.</param>
+        /// <param name="target_tensors"> By default, Keras will create placeholders for the model's target, which will be fed with the target data during training. If instead you would like to use your own target tensors (in turn, Keras will not expect external Numpy data for these targets at training time), you can specify them via the target_tensors argument. It can be a single tensor (for a single-output model), a list of tensors, or a dict mapping output names to target tensors.</param>
+        public void Compile(StringOrInstance optimizer, List<Tuple<string, string>> losses, string[] metrics = null, List<Tuple<string, float>> loss_weights = null,
+                       string sample_weight_mode = null, string[] weighted_metrics = null, NDarray[] target_tensors = null)
+        {
+            var args = new Dictionary<string, object>();
+            args["optimizer"] = optimizer;
+
+            var pyLossDict = new PyDict();
+            foreach (var loss in losses)
+                pyLossDict[loss.Item1] = new PyString(loss.Item2);
+            args["loss"] = pyLossDict;
+
+            args["metrics"] = metrics;
+
+            if (loss_weights != null)
+            {
+                var pyLossWeightDict = new PyDict();
+                foreach (var loss_weight in loss_weights)
+                    pyLossWeightDict[loss_weight.Item1] = new PyFloat(loss_weight.Item2);
+
+                args["loss_weights"] = pyLossWeightDict;
+            }
+            else
+            {
+                args["loss_weights"] = null;
+            }
+
+            args["sample_weight_mode"] = sample_weight_mode;
+            args["weighted_metrics"] = weighted_metrics;
+            args["target_tensors"] = target_tensors;
+
+            InvokeMethod("compile", args);
+        }
+
+
+        /// <summary>
         /// Trains the model for a given number of epochs (iterations on a dataset).
         /// </summary>
         /// <param name="x">Numpy array of training data (if the model has a single input), or list of Numpy arrays (if the model has multiple inputs). If input layers in the model are named, you can also pass a dictionary mapping input names to Numpy arrays. x can be None (default) if feeding from framework-native tensors (e.g. TensorFlow data tensors).</param>
@@ -89,6 +156,50 @@ namespace Keras.Models
         }
 
         /// <summary>
+        /// Trains the model for a given number of epochs (iterations on a dataset).
+        /// </summary>
+        /// <param name="x">Dataset with train data and labels</param>
+        /// <param name="batch_size">Integer or None. Number of samples per gradient update. If unspecified, batch_sizewill default to 32.</param>
+        /// <param name="verbose">Integer. 0, 1, or 2. Verbosity mode. 0 = silent, 1 = progress bar, 2 = one line per epoch.</param>
+        /// <param name="callbacks">List of keras.callbacks.Callback instances. List of callbacks to apply during training and validation (if ). See callbacks.</param>
+        /// <param name="validation_split">Float between 0 and 1. Fraction of the training data to be used as validation data. The model will set apart this fraction of the training data, will not train on it, and will evaluate the loss and any model metrics on this data at the end of each epoch. The validation data is selected from the last samples in the x and y data provided, before shuffling.</param>
+        /// <param name="validation_data">Dataset on which to evaluate the loss and any model metrics at the end of each epoch. The model will not be trained on this data. validation_data will override validation_split.</param>
+        /// <param name="shuffle">Boolean (whether to shuffle the training data before each epoch) or str (for 'batch'). 'batch' is a special option for dealing with the limitations of HDF5 data; it shuffles in batch-sized chunks. Has no effect when steps_per_epoch is not None.</param>
+        /// <param name="class_weight">Optional dictionary mapping class indices (integers) to a weight (float) value, used for weighting the loss function (during training only). This can be useful to tell the model to "pay more attention" to samples from an under-represented class.</param>
+        /// <param name="sample_weight">Optional Numpy array of weights for the training samples, used for weighting the loss function (during training only). You can either pass a flat (1D) Numpy array with the same length as the input samples (1:1 mapping between weights and samples), or in the case of temporal data, you can pass a 2D array with shape (samples, sequence_length), to apply a different weight to every timestep of every sample. In this case you should make sure to specifysample_weight_mode="temporal" in compile().</param>
+        /// <param name="initial_epoch">Integer. Epoch at which to start training (useful for resuming a previous training run).</param>
+        /// <param name="steps_per_epoch">Integer or None. Total number of steps (batches of samples) before declaring one epoch finished and starting the next epoch. When training with input tensors such as TensorFlow data tensors, the default None is equal to the number of samples in your dataset divided by the batch size, or 1 if that cannot be determined.</param>
+        /// <param name="validation_steps">Only relevant if steps_per_epoch is specified. Total number of steps (batches of samples) to validate before stopping.</param>
+        /// <returns>A History object. Its History.history attribute is a record of training loss values and metrics values at successive epochs, as well as validation loss values and validation metrics values (if applicable).</returns>
+        public History Fit(Tensorflow.Data.Dataset x, int epochs = 1, int verbose = 1, Callback[] callbacks = null,
+                        float validation_split = 0.0f, Tensorflow.Data.Dataset validation_data = null, bool shuffle = true, Dictionary<int, float> class_weight = null,
+                        NDarray sample_weight = null, int initial_epoch = 0, int? steps_per_epoch = null, int? validation_steps = null)
+        {
+            var args = new Dictionary<string, object>();
+            args["x"] = x;
+            args["epochs"] = epochs;
+            args["verbose"] = verbose;
+            args["callbacks"] = callbacks;
+            args["validation_split"] = validation_split;
+            if (validation_data != null)
+            {
+                args["validation_data"] = validation_data;
+            }
+
+            args["shuffle"] = shuffle;
+            if (class_weight != null)
+                args["class_weight"] = ToDict(class_weight);
+            args["sample_weight"] = sample_weight;
+            args["initial_epoch"] = initial_epoch;
+            args["steps_per_epoch"] = steps_per_epoch;
+            args["validation_steps"] = validation_steps;
+
+            PyObject py = InvokeMethod("fit", args);
+
+            return new History(py);
+        }
+
+        /// <summary>
         /// Returns the loss value & metrics values for the model in test mode.        Computation is done in batches.
         /// </summary>
         /// <param name="x"> Numpy array of test data (if the model has a single input), or list of Numpy arrays (if the model has multiple inputs). If input layers in the model are named, you can also pass a dictionary mapping input names to Numpy arrays. x can be None (default) if feeding from framework-native tensors (e.g. TensorFlow data tensors).</param>
@@ -114,6 +225,26 @@ namespace Keras.Models
         }
 
         /// <summary>
+        /// Returns the loss value & metrics values for the model in test mode.        Computation is done in batches.
+        /// </summary>
+        /// <param name="x"> Dataset of test data.</param>
+        /// <param name="verbose"> 0 or 1. Verbosity mode. 0 = silent, 1 = progress bar.</param>
+        /// <param name="steps"> Integer or None. Total number of steps (batches of samples) before declaring the evaluation round finished. Ignored with the default value of None.</param>
+        /// <param name="callbacks"> List of keras.callbacks.Callback instances. List of callbacks to apply during evaluation. See callbacks.</param>
+        /// <returns>Scalar test loss (if the model has a single output and no metrics) or list of scalars (if the model has multiple outputs and/or metrics). The attribute model.metrics_names will give you the display labels for the scalar outputs.</returns>
+        public double[] Evaluate(Tensorflow.Data.Dataset x, int verbose = 1, int? steps = null, Callback[] callbacks = null)
+        {
+            var args = new Dictionary<string, object>();
+            args["x"] = x;
+            args["verbose"] = verbose;
+            args["steps"] = steps;
+            args["callbacks"] = callbacks != null ? callbacks : null;
+
+            return InvokeMethod("evaluate", args)?.As<double[]>();
+        }
+
+
+        /// <summary>
         /// Generates output predictions for the input samples.
         /// Computation is done in batches.
         /// </summary>
@@ -135,7 +266,41 @@ namespace Keras.Models
             return new NDarray(InvokeMethod("predict", args));
         }
 
+        /// <summary>
+        /// Generates output predictions for the input samples.
+        /// Computation is done in batches.
+        /// </summary>
+        /// <param name="x">The input data, as a Numpy array (or list of Numpy arrays if the model has multiple inputs).</param>
+        /// <param name="verbose">Verbosity mode, 0 or 1.</param>
+        /// <param name="steps">Total number of steps (batches of samples) before declaring the prediction round finished. Ignored with the default value of None.</param>
+        /// <param name="callbacks">List of keras.callbacks.Callback instances. List of callbacks to apply during prediction. See callbacks.</param>
+        /// <returns>Numpy array(s) of predictions.</returns>
+        public List<NDarray> Predict(Tensorflow.Data.Dataset x, int verbose = 1, int? steps = null, Callback[] callbacks = null)
+        {
+            var args = new Dictionary<string, object>();
+            args["x"] = x;
+            args["verbose"] = verbose;
+            args["steps"] = steps;
+            args["callbacks"] = callbacks != null ? callbacks : null;
 
+            var resultPyObject = InvokeMethod("predict", args);
+            var resultList = new List<NDarray>();
+
+            var pyType = resultPyObject.GetPythonType();
+            var pyTypeString = pyType.ToString();
+
+            if (pyTypeString.Contains("list"))
+            {
+                var resultPyList = new PyList(resultPyObject);
+                for (int i = 0, j = (int)resultPyList.Length(); i < j; i++)
+                    resultList.Add(new NDarray(resultPyList[i]));
+            } else
+            {
+                resultList.Add(new NDarray(resultPyObject));
+            }
+
+            return resultList;
+        }
 
         /// <summary>
         /// Generates output predictions for the list of inputs given samples.
@@ -149,7 +314,6 @@ namespace Keras.Models
         /// <returns>Numpy array(s) of predictions.</returns>
         public NDarray Predict(List<NDarray> x, int? batch_size = null, int verbose = 1, int? steps = null, Callback[] callbacks = null)
         {
-
             var args = new Dictionary<string, object>();
 
             PyObject[] items = new PyObject[x.Count];
@@ -167,12 +331,6 @@ namespace Keras.Models
 
             return new NDarray(InvokeMethod("predict", args));
         }
-
-
-
-
-
-
 
 
         /// <summary>
